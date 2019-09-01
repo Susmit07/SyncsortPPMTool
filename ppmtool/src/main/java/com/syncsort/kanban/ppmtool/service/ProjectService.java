@@ -2,16 +2,12 @@ package com.syncsort.kanban.ppmtool.service;
 
 import com.syncsort.kanban.ppmtool.domain.Project;
 import com.syncsort.kanban.ppmtool.exception.ProjectIDException;
-import com.syncsort.kanban.ppmtool.exception.ProjectIDExceptionResponse;
 import com.syncsort.kanban.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ProjectService {
@@ -41,4 +37,11 @@ public class ProjectService {
         return projects;
     }
 
+    @Transactional
+    public void deleteProjectById(String projectIdentifierID) {
+        Project project = projectRepository.findByProjectIdentifier(projectIdentifierID.toUpperCase());
+        if(project ==  null)
+            throw new ProjectIDException("Project ID "+projectIdentifierID.toUpperCase()+ " don't exist to be deleted");
+        projectRepository.deleteByProjectIdentifier(projectIdentifierID);
+    }
 }
