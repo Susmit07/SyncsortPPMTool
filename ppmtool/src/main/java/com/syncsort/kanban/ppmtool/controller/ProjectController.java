@@ -34,7 +34,7 @@ public class ProjectController {
         return new ResponseEntity<>(project, HttpStatus.CREATED);
     }
 
-    // Get Employee Details on basis of projectID.
+    // Get Employee details on basis of projectID.
     @GetMapping("/get/{projectID}")
     public ResponseEntity<?> findProjectByID(@PathVariable String projectID) {
         Project projectByID = projectService.findByProjectID(projectID);
