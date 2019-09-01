@@ -1,6 +1,10 @@
 package com.syncsort.kanban.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -9,12 +13,23 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Project name is required!!")
     private String projectName;
+    // Field is non-updatable and unique.
+    @NotBlank(message = "Project identifier is required!!")
+    @Size(min = 4, max = 5, message = "Please use 4 to 5 characters")
+    @Column(updatable = false, unique = true)
     private String projectIdentifier;
+    @NotBlank(message = "Project description is required")
     private String description;
+    // JSON Field output is formatted to the specified format
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date startDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date endDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date createdDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updatedAt;
 
     public Project() {
