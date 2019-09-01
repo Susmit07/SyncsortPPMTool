@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/project")
@@ -30,13 +31,20 @@ public class ProjectController {
         if (mapValidationErrorService.getValidationErrors(bindingResult) != null)
             return mapValidationErrorService.getValidationErrors(bindingResult);
         projectService.saveOrUpdateProject(project);
-        return new ResponseEntity<Project>(project, HttpStatus.CREATED);
+        return new ResponseEntity<>(project, HttpStatus.CREATED);
     }
 
     // Get Employee Details on basis of projectID.
     @GetMapping("/get/{projectID}")
-    public ResponseEntity<?> getProjectByID(@PathVariable String projectID) {
+    public ResponseEntity<?> findProjectByID(@PathVariable String projectID) {
         Project projectByID = projectService.findByProjectID(projectID);
-        return new ResponseEntity<Project>(projectByID, HttpStatus.OK);
+        return new ResponseEntity<>(projectByID, HttpStatus.OK);
+    }
+
+    // Get all Employee Details.
+    @GetMapping("/getAll")
+    public ResponseEntity<?> findAllProjects() {
+        List<Project> projectByID = projectService.findAllProjects();
+        return new ResponseEntity<>(projectByID, HttpStatus.OK);
     }
 }
