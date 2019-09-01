@@ -1,6 +1,7 @@
 package com.syncsort.kanban.ppmtool.controller;
 
 import com.syncsort.kanban.ppmtool.domain.Project;
+import com.syncsort.kanban.ppmtool.service.MapValidationErrorService;
 import com.syncsort.kanban.ppmtool.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,16 +25,16 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
+    @Autowired
+    MapValidationErrorService mapValidationErrorService;
+
     // @Valid for better readable exception is the response due to javax validation.
     // Binding result is an interface that invokes the validator on the object and binds the result to it
     @PostMapping
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()) {
-            Map<String, String> validationErrors = bindingResult.getFieldErrors()
-                    .stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-            return new ResponseEntity< Map<String, String>>(validationErrors, HttpStatus.BAD_REQUEST);
-        }
+        if(mapValidationErrorService.getValidationErrors(bindingResult) != null)
+            return mapValidationErrorService.getValidationErrors(bindingResult);
         projectService.saveOrUpdateProject(project);
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
