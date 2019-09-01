@@ -7,13 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/project")
@@ -27,6 +23,7 @@ public class ProjectController {
 
     // @Valid for better readable exception is the response due to javax validation.
     // Binding result is an interface that invokes the validator on the object and binds the result to it
+    // Persist employee.
     @PostMapping("/add")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult) {
 
@@ -36,6 +33,7 @@ public class ProjectController {
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
 
+    // Get Employee Details on basis of projectID.
     @GetMapping("/get/{projectID}")
     public ResponseEntity<?> getProjectByID(@PathVariable String projectID) {
         Project projectByID = projectService.findByProjectID(projectID);
