@@ -25,7 +25,7 @@ public class ProjectController {
     // @Valid for better readable exception is the response due to javax validation.
     // Binding result is an interface that invokes the validator on the object and binds the result to it
     // Persist employee.
-    @PostMapping("/add")
+    @PostMapping("/addProject")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult) {
 
         if (mapValidationErrorService.getValidationErrors(bindingResult) != null)
@@ -35,7 +35,7 @@ public class ProjectController {
     }
 
     // Get Employee details on basis of projectID.
-    @GetMapping("/get/{projectID}")
+    @GetMapping("/getProject/{projectID}")
     public ResponseEntity<?> findProjectByID(@PathVariable String projectID) {
         Project projectByID = projectService.findByProjectID(projectID);
         return new ResponseEntity<>(projectByID, HttpStatus.OK);
@@ -49,7 +49,7 @@ public class ProjectController {
     }
 
     // Delete Employee Details.
-    @DeleteMapping("/delete/{projectID}")
+    @DeleteMapping("/deleteProject/{projectID}")
     public ResponseEntity<?> deleteProjectByID(@PathVariable String projectID){
         projectService.deleteProjectById(projectID);
         return new ResponseEntity<>("Project with ID: "+projectID+" was deleted successfully.", HttpStatus.OK);
